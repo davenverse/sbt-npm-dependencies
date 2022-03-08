@@ -35,11 +35,11 @@ object NpmDependenciesPlugin extends AutoPlugin {
     val npmDevDependencies: SettingKey[Seq[(String, String)]] =
       settingKey[Seq[(String, String)]]("NPM dev dependencies (libraries that the build uses)")
 
-    val npmTransitiveDependencies: TaskKey[Seq[(String, String)]] = 
-      taskKey[Seq[(String, String)]]("Calculates all scala.js transitive dependencies")
+    val npmTransitiveDependencies: TaskKey[Map[String, Seq[(String, String)]]] = 
+      taskKey[Map[String, Seq[(String, String)]]]("Calculates all scala.js transitive dependencies")
 
-    val npmTransitiveDevDependencies: TaskKey[Seq[(String, String)]] = 
-      taskKey[Seq[(String, String)]]("Calculates all scala.js transitive dev dependencies")
+    val npmTransitiveDevDependencies: TaskKey[Map[String, Seq[(String, String)]]] = 
+      taskKey[Map[String, Seq[(String, String)]]]("Calculates all scala.js transitive dev dependencies")
   }
   import autoImport._
 
@@ -69,27 +69,24 @@ object NpmDependenciesPlugin extends AutoPlugin {
   private lazy val compileTransitiveSettings: Seq[Setting[_]] = Def.settings(
     npmTransitiveDependencies := {
       val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
-      deps.compileDependencies
+      deps.toList.map{ case (s, dep) => (s -> dep.compileDependencies)}.toMap
     },
 
     npmTransitiveDevDependencies := {
       val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
-      deps.compileDevDependencies
+      deps.toList.map{ case (s, dep) => (s -> dep.compileDevDependencies)}.toMap
     }
   )
 
   private lazy val testTransitiveSettings: Seq[Setting[_]] = Def.settings(
     npmTransitiveDependencies := {
       val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
-
-      deps.compileDependencies ++
-      deps.testDependencies
+      deps.toList.map{ case (s, dep) => (s -> (dep.compileDependencies ++ dep.testDependencies))}.toMap
     },
 
     npmTransitiveDevDependencies := {
       val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
-      deps.compileDevDependencies ++
-      deps.testDevDependencies
+      deps.toList.map{ case (s, dep) => (s -> (dep.compileDevDependencies ++ dep.testDevDependencies))}.toMap
     }
   )
 

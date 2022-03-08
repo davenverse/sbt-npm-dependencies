@@ -64,8 +64,8 @@ object NpmDependencies {
     * @param cp Classpath
     * @return All the NPM dependencies found in the given classpath
     */
-  def collectFromClasspath(cp: Def.Classpath): NpmDependencies =
-    (
+  def collectFromClasspath(cp: Def.Classpath): Map[String, NpmDependencies] = {
+    val entries = {
       for {
         cpEntry <- Attributed.data(cp) if cpEntry.exists
         results <-
@@ -87,8 +87,11 @@ object NpmDependencies {
               parser.parse(IO.read(file)).flatMap(_.as[NpmDependencies]).fold[NpmDependencies](throw _, identity(_))
             }
           } else sys.error(s"Illegal classpath entry: ${cpEntry.absolutePath}")
-      } yield results
-    ).fold(NpmDependencies(Nil, Nil, Nil, Nil))(_ ++ _)
+      } yield cpEntry.toString -> results
+    }
+
+    entries.toMap
+  }
 
   /**
     * Writes the given dependencies into a manifest file
