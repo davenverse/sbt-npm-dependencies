@@ -34,17 +34,8 @@ lazy val core = project.in(file("core"))
       scripted.toTask("").value
     },
     addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion),
-    // addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.20.0"),
     libraryDependencies ++= Seq(
-    //   "org.typelevel"               %% "cats-core"                  % catsV,
-    //   "org.typelevel"               %% "cats-effect"                % catsEffectV,
-
-    //   "co.fs2"                      %% "fs2-core"                   % fs2V,
-    //   "co.fs2"                      %% "fs2-io"                     % fs2V,
-
       "io.circe"                    %% "circe-core"                 % circeV,
-    //   // "io.circe"                    %% "circe-generic"              % circeV,
       "io.circe"                    %% "circe-parser"               % circeV,
-
     )
   )
