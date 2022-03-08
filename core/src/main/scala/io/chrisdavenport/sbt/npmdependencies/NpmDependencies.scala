@@ -64,6 +64,7 @@ object NpmDependencies {
     * @param cp Classpath
     * @return All the NPM dependencies found in the given classpath
     */
+  // Slightly awkward. Perhaps we should match the name of the entries more directly.
   def collectFromClasspath(cp: Def.Classpath): Map[String, NpmDependencies] = {
     val entries = {
       for {
