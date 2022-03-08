@@ -37,6 +37,9 @@ object NpmDependenciesPlugin extends AutoPlugin {
 
     val npmTransitiveDependencies: TaskKey[Seq[(String, String)]] = 
       taskKey[Seq[(String, String)]]("Calculates all scala.js transitive dependencies")
+
+    val npmTransitiveDevDependencies: TaskKey[Seq[(String, String)]] = 
+      taskKey[Seq[(String, String)]]("Calculates all scala.js transitive dev dependencies")
   }
   import autoImport._
 
@@ -65,9 +68,14 @@ object NpmDependenciesPlugin extends AutoPlugin {
 
   private lazy val compileTransitiveSettings: Seq[Setting[_]] = Def.settings(
     npmTransitiveDependencies := {
-        val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
-        deps.compileDependencies
-      }
+      val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
+      deps.compileDependencies
+    },
+
+    npmTransitiveDevDependencies := {
+      val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
+      deps.compileDevDependencies
+    }
   )
 
   private lazy val testTransitiveSettings: Seq[Setting[_]] = Def.settings(
@@ -76,6 +84,12 @@ object NpmDependenciesPlugin extends AutoPlugin {
 
       deps.compileDependencies ++
       deps.testDependencies
+    },
+
+    npmTransitiveDevDependencies := {
+      val deps = NpmDependencies.collectFromClasspath(fullClasspath.value)
+      deps.compileDevDependencies ++
+      deps.testDevDependencies
     }
   )
 
@@ -83,7 +97,6 @@ object NpmDependenciesPlugin extends AutoPlugin {
     Def.settings(
       npmDependencies ++= (Compile / npmDependencies).value,
       npmDevDependencies ++= (Compile / npmDevDependencies).value,
-      
     )
 
   /**
