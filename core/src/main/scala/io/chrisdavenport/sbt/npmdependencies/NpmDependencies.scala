@@ -54,9 +54,9 @@ object NpmDependencies {
   implicit val encoder = Encoder.instance[NpmDependencies](npm => 
     Json.obj(
       "compile-dependencies" -> npm.compileDependencies.map(TupledMap.fromTuple).asJson,
-      "test-dependencies" -> npm.compileDependencies.map(TupledMap.fromTuple).asJson,
-      "compile-devDependencies" -> npm.compileDependencies.map(TupledMap.fromTuple).asJson,
-      "test-devDependencies" -> npm.compileDependencies.map(TupledMap.fromTuple).asJson,
+      "test-dependencies" -> npm.testDependencies.map(TupledMap.fromTuple).asJson,
+      "compile-devDependencies" -> npm.compileDevDependencies.map(TupledMap.fromTuple).asJson,
+      "test-devDependencies" -> npm.testDevDependencies.map(TupledMap.fromTuple).asJson,
     )  
   )
 
