@@ -1,6 +1,6 @@
 val scalaJSVersion = sys.env.getOrElse("SCALAJS_VERSION", "1.8.0")
 
-ThisBuild / crossScalaVersions := Seq("2.12.14")
+ThisBuild / crossScalaVersions := Seq("2.12.18")
 ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / githubWorkflowBuild := Seq(
