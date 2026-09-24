@@ -14,6 +14,14 @@ ThisBuild / tlCiReleaseBranches := Seq("main")
 ThisBuild / crossScalaVersions := Seq("2.12.20")
 ThisBuild / scalaVersion := "2.12.20"
 
+// Compiler settings DavenversePlugin injected globally; sbt-typelevel-ci-release
+// does not supply them. -Ypartial-unification is needed for cats mapN on 2.12.
+ThisBuild / scalacOptions += "-Ypartial-unification"
+ThisBuild / libraryDependencies ++= Seq(
+  compilerPlugin("org.typelevel" % "kind-projector" % "0.13.4" cross CrossVersion.full),
+  compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
+)
+
 val scalaJSVersion = sys.env.getOrElse("SCALAJS_VERSION", "1.22.0")
 
 ThisBuild / versionScheme := Some("early-semver")
