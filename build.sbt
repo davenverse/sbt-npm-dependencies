@@ -1,6 +1,21 @@
-val scalaJSVersion = sys.env.getOrElse("SCALAJS_VERSION", "1.8.0")
+ThisBuild / tlBaseVersion := "0.1" // current series x.y
 
-ThisBuild / crossScalaVersions := Seq("2.12.14")
+ThisBuild / organization := "io.chrisdavenport"
+ThisBuild / organizationName := "Christopher Davenport"
+ThisBuild / startYear := Some(2022)
+ThisBuild / licenses := Seq(License.MIT)
+ThisBuild / developers := List(
+  tlGitHubDev("christopherdavenport", "Christopher Davenport")
+)
+
+ThisBuild / tlCiReleaseBranches := Seq("main")
+
+// sbt plugins build against the sbt 1.x Scala version only.
+ThisBuild / crossScalaVersions := Seq("2.12.20")
+ThisBuild / scalaVersion := "2.12.20"
+
+val scalaJSVersion = sys.env.getOrElse("SCALAJS_VERSION", "1.22.0")
+
 ThisBuild / versionScheme := Some("early-semver")
 
 ThisBuild / githubWorkflowBuild := Seq(
@@ -15,8 +30,7 @@ val circeV = "0.14.1"
 
 // Projects
 lazy val `sbt-npm-dependencies` = project.in(file("."))
-  .disablePlugins(MimaPlugin)
-  .enablePlugins(NoPublishPlugin)
+    .enablePlugins(NoPublishPlugin)
   .aggregate(core)
 
 lazy val core = project.in(file("core"))
