@@ -8,7 +8,7 @@ ThisBuild / developers := List(
   tlGitHubDev("christopherdavenport", "Christopher Davenport")
 )
 
-ThisBuild / tlCiReleaseBranches := Seq("main")
+ThisBuild / tlCiReleaseBranches := Seq()
 
 // sbt plugins build against the sbt 1.x Scala version only.
 ThisBuild / crossScalaVersions := Seq("2.12.20")
